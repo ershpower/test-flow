@@ -17,6 +17,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "ajv": "^7.2.4",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
