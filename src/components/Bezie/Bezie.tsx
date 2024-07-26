@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import './style.css';
 
 interface IPoint {
     x: number;
@@ -33,12 +34,14 @@ const Bezie: FC<IBezieProps> = ({ point1, point2 }) => {
                 {/*<circle cx={point1.x} cy={point1.y} r="6" fill="green" />*/}
                 {/*<circle cx={point2.x} cy={point2.y} r="6" fill="yellow" />*/}
                 <path
-                    d={`M 0 700 Q ${point1.x} ${point1.y} ${point2.x} ${point2.y}`}
+                    className={'line'}
+                    d={`M 0 700 Q 600 700 800 334`}
                     fill="transparent"
                     stroke="url(#grad_stroke)"
                 ></path>
                 <path
-                    d={`M 0 700 Q ${point1.x} ${point1.y} ${point2.x} ${point2.y} L ${point2.x} 700 Z`}
+                    className={'shadow'}
+                    d={`M 0 700 Q 600 700 800 334 L 800 700 Z`}
                     fill="url(#grad)"
                 ></path>
             </g>

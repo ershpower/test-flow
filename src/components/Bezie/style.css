@@ -1,0 +1,50 @@
+@keyframes move-line {
+    0%{
+        d: path("M 0 700 Q 600 700 800 334")
+    }
+    20%{
+        d: path("M 0 700 Q 600 700 820 315")
+    }
+    40%{
+        d: path("M 0 700 Q 600 700 810 315")
+    }
+    60%{
+        d: path("M 0 700 Q 600 700 830 300")
+    }
+    80%{
+        d: path("M 0 700 Q 600 700 810 330")
+    }
+    100%{
+        d: path("M 0 700 Q 600 700 800 334")
+    }
+}
+
+.line{
+    animation: move-line 3s linear infinite;
+}
+
+@keyframes move-shadow {
+    0%{
+        d: path("M 0 700 Q 600 700 800 334 L 800 700 Z")
+    }
+    20%{
+        d: path("M 0 700 Q 600 700 820 315 L 800 700 Z")
+    }
+    40%{
+        d: path("M 0 700 Q 600 700 810 315 L 800 700 Z")
+    }
+    60%{
+        d: path("M 0 700 Q 600 700 830 300 L 800 700 Z")
+    }
+    80%{
+        d: path("M 0 700 Q 600 700 810 330 L 800 700 Z")
+    }
+    100%{
+        d: path("M 0 700 Q 600 700 800 334 L 800 700 Z")
+    }
+}
+
+.shadow{
+    animation: move-shadow 3s linear infinite;
+}
+
