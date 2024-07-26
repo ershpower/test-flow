@@ -101,3 +101,11 @@
   left: 0;
   top: 0;
 }
+
+.man{
+  width: 100px;
+  height: 150px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
