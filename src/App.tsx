@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Bezie from './components/Bezie/Bezie';
 import { generateRandomNumberInRange } from './utils';
@@ -42,23 +42,6 @@ function App() {
         return () => clearInterval(timer);
     }, []);
 
-    const handleChangePoint2X = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setPoint2((prev) => ({
-            ...prev,
-            x: +value,
-        }));
-    };
-
-    const handleChangePoint2Y = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        const reversedValue = 700 - +value;
-        setPoint2((prev) => ({
-            ...prev,
-            y: +reversedValue,
-        }));
-    };
-
     return (
         <div className="App">
             <div className="container">
@@ -78,21 +61,6 @@ function App() {
                     <Bezie point1={point1} point2={point2} />
                 </div>
             </div>
-            правее
-            <input
-                type="range"
-                min={600}
-                max={1700}
-                onChange={handleChangePoint2X}
-            />
-            <br />
-            выше
-            <input
-                type="range"
-                min={0}
-                max={700}
-                onChange={handleChangePoint2Y}
-            />
         </div>
     );
 }
