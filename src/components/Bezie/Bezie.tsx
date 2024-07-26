@@ -11,7 +11,7 @@ interface IBezieProps {
     point2: IPoint;
 }
 
-const Bezie: FC<IBezieProps> = ({ point1, point2 }) => {
+export const Bezie: FC<IBezieProps> = ({ point1, point2 }) => {
     return (
         <svg style={{ height: '700px', width: '1700px' }}>
             <defs>
@@ -46,5 +46,3 @@ const Bezie: FC<IBezieProps> = ({ point1, point2 }) => {
         </svg>
     );
 };
-
-export default Bezie;

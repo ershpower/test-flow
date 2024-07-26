@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Bezie from './components/Bezie/Bezie';
+import { Bezie } from './components/Bezie/Bezie';
 import { generateRandomNumberInRange } from './utils';
 import Man from './assets/man.webp';
 
