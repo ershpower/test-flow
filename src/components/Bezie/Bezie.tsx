@@ -1,17 +1,33 @@
-import React, { FC, useState } from 'react';
-import './style.css';
-
-interface IPoint {
-    x: number;
-    y: number;
-}
+import React, { FC, useEffect, useState } from 'react';
+// import './style.css';
+import { useSpring, animated } from '@react-spring/web';
+import { generateRandomNumberInRange } from '../../utils';
 
 interface IBezieProps {
-    point1: IPoint;
-    point2: IPoint;
+    randomX: number;
+    randomY: number;
 }
 
-const Bezie: FC<IBezieProps> = ({ point1, point2 }) => {
+const Bezie: FC<IBezieProps> = ({ randomY, randomX }) => {
+    const [pathLine, setPathLine] = useState('M 0 700 Q 600 700 800 334');
+    const [pathShadow, setPathShadow] = useState(
+        'M 0 700 Q 600 700 800 334 L 800 700 Z'
+    );
+
+    const props = useSpring({
+        d: pathLine as string,
+        s: pathShadow as string,
+        config: { duration: 2000 }, // длительность анимации
+    });
+
+    useEffect(() => {
+        // const randomX = generateRandomNumberInRange(760, 840);
+        // const randomY = generateRandomNumberInRange(334, 300);
+        const newPathLine = `M 0 700 Q 600 700 ${randomX} ${randomY}`;
+        const newPathShadow = `M 0 700 Q 600 700 ${randomX} ${randomY} L 800 700 Z`;
+        setPathLine(newPathLine);
+        setPathShadow(newPathShadow);
+    }, [randomX, randomY]);
     return (
         <svg style={{ height: '700px', width: '1700px' }}>
             <defs>
@@ -33,17 +49,19 @@ const Bezie: FC<IBezieProps> = ({ point1, point2 }) => {
                 {/*<circle cx="0" cy="700" r="6" fill="red" />*/}
                 {/*<circle cx={point1.x} cy={point1.y} r="6" fill="green" />*/}
                 {/*<circle cx={point2.x} cy={point2.y} r="6" fill="yellow" />*/}
-                <path
+                <animated.path
                     className={'line'}
-                    d={`M 0 700 Q 600 700 800 334`}
+                    // eslint-disable-next-line react/prop-types
+                    d={props.d}
                     fill="transparent"
                     stroke="url(#grad_stroke)"
-                ></path>
-                <path
+                ></animated.path>
+                <animated.path
                     className={'shadow'}
-                    d={`M 0 700 Q 600 700 800 334 L 800 700 Z`}
+                    // eslint-disable-next-line react/prop-types
+                    d={props.s}
                     fill="url(#grad)"
-                ></path>
+                ></animated.path>
             </g>
         </svg>
     );

@@ -40,3 +40,13 @@
 export const generateRandomNumberInRange = (min: number, max: number) => {
     return Math.random() * (max + 1 - min) + min;
 };
+
+export const getNewRandomPathX = () => {
+    const newX = generateRandomNumberInRange(760, 840);
+    return `M 0 700 Q 600 700 ${newX} 334`;
+};
+
+export const getNewRandomPathY = () => {
+    const newX = generateRandomNumberInRange(334, 300);
+    return `M 0 700 Q 600 700 ${newX} 334`;
+};
