@@ -1,62 +1,52 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import './App.css';
+import Bezie from './components/Bezie/Bezie';
 
 function App() {
+    const [point1, setPoint1] = useState({ x: 600, y: 700 });
+    const [point2, setPoint2] = useState({ x: 600, y: 334 });
+
+    const handleChangePoint2X = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setPoint2((prev) => ({
+            ...prev,
+            x: +value,
+        }));
+    };
+
+    const handleChangePoint2Y = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const reversedValue = 700 - +value;
+        setPoint2((prev) => ({
+            ...prev,
+            y: +reversedValue,
+        }));
+    };
+
     return (
         <div className="App">
             <div className="container">
                 <div className="y"></div>
                 <div className="x"></div>
-                <div className="grapgic">
-                    <svg style={{ height: '700px' }}>
-                        <defs>
-                            <linearGradient
-                                id="grad"
-                                x1="0"
-                                x2="1"
-                                y1="0"
-                                y2="1"
-                            >
-                                <stop
-                                    stopColor="#9d7aff"
-                                    stopOpacity=".33"
-                                ></stop>
-                                <stop
-                                    offset=".987"
-                                    stopColor="#9d7aff"
-                                    stopOpacity="0"
-                                ></stop>
-                            </linearGradient>
-                            <linearGradient
-                                id="grad_stroke"
-                                x1="0"
-                                x2="1"
-                                y1="0"
-                                y2="1"
-                            >
-                                <stop stopColor="#9D7AFF"></stop>
-                                <stop offset=".787" stopColor="#622BFC"></stop>
-                                <stop
-                                    offset="1"
-                                    stopColor="#5c24fc"
-                                    stopOpacity="0"
-                                ></stop>
-                            </linearGradient>
-                        </defs>
-                        <g>
-                            <path
-                                d="M 0 499 Q 260.7359999996424 499 391.10399999946355 334.41040000022576"
-                                fill="transparent"
-                                stroke="url(#grad_stroke)"
-                            ></path>
-                            <path
-                                d="M 0 499 Q 260.7359999996424 499 391.10399999946355 334.41040000022576 L 391.10399999946355 499 Z"
-                                fill="url(#grad)"
-                            ></path>
-                        </g>
-                    </svg>
+                <div className="graphic">
+                    <Bezie point1={point1} point2={point2} />
                 </div>
             </div>
+            правее
+            <input
+                type="range"
+                min={600}
+                max={1700}
+                onChange={handleChangePoint2X}
+            />
+            <br />
+            выше
+            <input
+                type="range"
+                min={0}
+                max={700}
+                onChange={handleChangePoint2Y}
+            />
         </div>
     );
 }
