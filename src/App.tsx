@@ -1,10 +1,45 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import './App.css';
 import Bezie from './components/Bezie/Bezie';
+import { generateRandomNumberInRange } from './utils';
+
+const DELAY = 200;
+const diffX = 40;
+const diffY = 10;
 
 function App() {
     const [point1, setPoint1] = useState({ x: 600, y: 700 });
-    const [point2, setPoint2] = useState({ x: 600, y: 334 });
+    const [point2, setPoint2] = useState({ x: 800, y: 334 });
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const generatedNumber = generateRandomNumberInRange(
+                point2.x - diffX,
+                point2.x + diffX
+            );
+
+            setPoint2((prev) => ({
+                ...prev,
+                x: generatedNumber,
+            }));
+        }, DELAY);
+
+        return () => clearInterval(timer);
+    }, []);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const generatedNumber = generateRandomNumberInRange(
+                point2.y - diffY,
+                point2.y + diffY
+            );
+            setPoint2((prev) => ({
+                ...prev,
+                y: generatedNumber,
+            }));
+        }, DELAY);
+
+        return () => clearInterval(timer);
+    }, []);
 
     const handleChangePoint2X = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
