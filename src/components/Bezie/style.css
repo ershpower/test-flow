@@ -1,0 +1,16 @@
+.man{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    height: 200px;
+}
+
+.man img{
+    width: 100px;
+    height: 135px;
+}
+
+.wrapper{
+    position: relative;
+}

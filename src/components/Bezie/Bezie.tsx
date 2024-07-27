@@ -1,48 +1,149 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { generateRandomNumberInRange } from '../../utils';
+import Man from '../../assets/man.webp';
+import './style.css';
 
-interface IPoint {
-    x: number;
-    y: number;
-}
+const Bezie = () => {
+    const [pathVariants, setPathVariants] = useState({
+        hidden: { d: 'M 0 700 Q 600 700 800 334' },
+        visible: { d: 'M 0 700 Q 600 700 900 334' },
+    });
 
-interface IBezieProps {
-    point1: IPoint;
-    point2: IPoint;
-}
+    const [pathVariantsShadow, setPathVariantsShadow] = useState({
+        hidden: { d: 'M 0 700 Q 600 700 800 334' },
+        visible: { d: 'M 0 700 Q 600 700 900 334' },
+    });
 
-const Bezie: FC<IBezieProps> = ({ point1, point2 }) => {
+    const [coordinates, setCoordinates] = useState<string[]>([]);
+
+    const testRef = useRef<any>(null);
+
+    useEffect(() => {
+        if (testRef.current) {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (
+                        mutation.type === 'attributes' &&
+                        mutation.attributeName === 'd'
+                    ) {
+                        const targetElement = mutation.target as Element;
+                        const newD = targetElement.getAttribute('d') || '';
+                        // console.log(newD);
+                        // const data = mutation.target.getAttribute('d');
+                        const coordinates = newD.split(' ').slice(-2);
+                        setCoordinates([...coordinates]);
+                    }
+                });
+            });
+            observer.observe(testRef.current, {
+                attributes: true,
+                attributeFilter: ['d'],
+            });
+
+            return () => observer.disconnect();
+        }
+    }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const randomX = generateRandomNumberInRange(760, 840);
+            const randomY = generateRandomNumberInRange(320, 350);
+
+            const visiblePath = `M 0 700 Q 600 700 ${randomX} ${randomY}`;
+            setPathVariants((prev) => ({
+                ...prev,
+                visible: { d: visiblePath },
+            }));
+
+            const visiblePathShadow = `M 0 700 Q 600 700 ${randomX} ${randomY} L ${randomX} 700 Z`;
+            setPathVariantsShadow((prev) => ({
+                ...prev,
+                visible: { d: visiblePathShadow },
+            }));
+        }, 500);
+
+        return () => clearInterval(timer);
+    }, []);
+
     return (
-        <svg style={{ height: '700px', width: '1700px' }}>
-            <defs>
-                <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
-                    <stop stopColor="#9d7aff" stopOpacity=".33"></stop>
-                    <stop
-                        offset=".987"
-                        stopColor="#9d7aff"
-                        stopOpacity="0"
-                    ></stop>
-                </linearGradient>
-                <linearGradient id="grad_stroke" x1="0" x2="1" y1="0" y2="1">
-                    <stop stopColor="#9D7AFF"></stop>
-                    <stop offset=".787" stopColor="#622BFC"></stop>
-                    <stop offset="1" stopColor="#5c24fc" stopOpacity="0"></stop>
-                </linearGradient>
-            </defs>
-            <g>
-                {/*<circle cx="0" cy="700" r="6" fill="red" />*/}
-                {/*<circle cx={point1.x} cy={point1.y} r="6" fill="green" />*/}
-                {/*<circle cx={point2.x} cy={point2.y} r="6" fill="yellow" />*/}
-                <path
-                    d={`M 0 700 Q ${point1.x} ${point1.y} ${point2.x} ${point2.y}`}
-                    fill="transparent"
-                    stroke="url(#grad_stroke)"
-                ></path>
-                <path
-                    d={`M 0 700 Q ${point1.x} ${point1.y} ${point2.x} ${point2.y} L ${point2.x} 700 Z`}
-                    fill="url(#grad)"
-                ></path>
-            </g>
-        </svg>
+        <div className="wrapper">
+            <div className="man">
+                <img
+                    src={Man}
+                    alt="man"
+                    className="man"
+                    style={{
+                        transform: `translate(${+coordinates[0] - 20}px, -${+coordinates[1] - 50}px)`,
+                    }}
+                />
+            </div>
+
+            <svg style={{ height: '700px', width: '1700px' }}>
+                <defs>
+                    <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
+                        <stop stopColor="#9d7aff" stopOpacity=".33"></stop>
+                        <stop
+                            offset=".987"
+                            stopColor="#9d7aff"
+                            stopOpacity="0"
+                        ></stop>
+                    </linearGradient>
+                    <linearGradient
+                        id="grad_stroke"
+                        x1="0"
+                        x2="1"
+                        y1="0"
+                        y2="1"
+                    >
+                        <stop stopColor="#9D7AFF"></stop>
+                        <stop offset=".787" stopColor="#622BFC"></stop>
+                        <stop
+                            offset="1"
+                            stopColor="#5c24fc"
+                            stopOpacity="0"
+                        ></stop>
+                    </linearGradient>
+                </defs>
+                <g>
+                    {/*<circle cx="0" cy="700" r="6" fill="red" />*/}
+                    <circle
+                        cx={coordinates[0]}
+                        cy={coordinates[1]}
+                        r="6"
+                        fill="green"
+                    />
+                    {/*<circle cx={point2.x} cy={point2.y} r="6" fill="yellow" />*/}
+                    <motion.path
+                        ref={testRef}
+                        fill="transparent"
+                        stroke="url(#grad_stroke)"
+                        strokeWidth="2"
+                        variants={pathVariants}
+                        initial="hidden"
+                        animate="visible"
+                        transition={{
+                            default: {
+                                duration: 0.5,
+                                repeat: Infinity,
+                            },
+                        }}
+                    ></motion.path>
+                    <motion.path
+                        variants={pathVariantsShadow}
+                        initial="hidden"
+                        animate="visible"
+                        transition={{
+                            default: {
+                                duration: 0.5,
+                                repeat: Infinity,
+                            },
+                        }}
+                        fill="url(#grad)"
+                    ></motion.path>
+                </g>
+            </svg>
+        </div>
     );
 };
 
