@@ -1,26 +1,29 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { generateRandomNumberInRange } from '../../utils';
 import Man from '../../assets/man.webp';
 import './style.css';
 
-const Bezie = () => {
+const halfImgHeight = 75;
+const halfImgWidth = 50;
+
+export const Bezie = () => {
     const [pathVariants, setPathVariants] = useState({
         hidden: { d: 'M 0 700 Q 600 700 800 334' },
         visible: { d: 'M 0 700 Q 600 700 900 334' },
     });
 
     const [pathVariantsShadow, setPathVariantsShadow] = useState({
-        hidden: { d: 'M 0 700 Q 600 700 800 334' },
-        visible: { d: 'M 0 700 Q 600 700 900 334' },
+        hidden: { d: 'M 0 700 Q 600 700 800 334 L 800 700 Z' },
+        visible: { d: 'M 0 700 Q 600 700 900 334 L 800 700 Z' },
     });
 
     const [coordinates, setCoordinates] = useState<string[]>([]);
 
-    const testRef = useRef<any>(null);
+    const bezieLineRef = useRef<any>(null);
 
     useEffect(() => {
-        if (testRef.current) {
+        if (bezieLineRef.current) {
             const observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (
@@ -28,15 +31,14 @@ const Bezie = () => {
                         mutation.attributeName === 'd'
                     ) {
                         const targetElement = mutation.target as Element;
-                        const newD = targetElement.getAttribute('d') || '';
-                        // console.log(newD);
-                        // const data = mutation.target.getAttribute('d');
-                        const coordinates = newD.split(' ').slice(-2);
+                        const attributeD =
+                            targetElement.getAttribute('d') || '';
+                        const coordinates = attributeD.split(' ').slice(-2);
                         setCoordinates([...coordinates]);
                     }
                 });
             });
-            observer.observe(testRef.current, {
+            observer.observe(bezieLineRef.current, {
                 attributes: true,
                 attributeFilter: ['d'],
             });
@@ -74,7 +76,7 @@ const Bezie = () => {
                     alt="man"
                     className="man"
                     style={{
-                        transform: `translate(${+coordinates[0] - 20}px, -${+coordinates[1] - 50}px)`,
+                        transform: `translate(${+coordinates[0] - halfImgWidth}px, ${+coordinates[1] - halfImgHeight}px)`,
                     }}
                 />
             </div>
@@ -107,15 +109,15 @@ const Bezie = () => {
                 </defs>
                 <g>
                     {/*<circle cx="0" cy="700" r="6" fill="red" />*/}
-                    <circle
-                        cx={coordinates[0]}
-                        cy={coordinates[1]}
-                        r="6"
-                        fill="green"
-                    />
+                    {/*<circle*/}
+                    {/*    cx={coordinates[0]}*/}
+                    {/*    cy={coordinates[1]}*/}
+                    {/*    r="6"*/}
+                    {/*    fill="green"*/}
+                    {/*/>*/}
                     {/*<circle cx={point2.x} cy={point2.y} r="6" fill="yellow" />*/}
                     <motion.path
-                        ref={testRef}
+                        ref={bezieLineRef}
                         fill="transparent"
                         stroke="url(#grad_stroke)"
                         strokeWidth="2"
@@ -146,5 +148,3 @@ const Bezie = () => {
         </div>
     );
 };
-
-export default Bezie;
